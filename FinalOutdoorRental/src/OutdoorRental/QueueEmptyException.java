@@ -1,6 +1,6 @@
 package OutdoorRental;
 
-class QueueEmptyException extends Exception {
+public class QueueEmptyException extends Exception {
     public QueueEmptyException(String message) {
         super(message);
     }

@@ -18,18 +18,23 @@ public class OutdoorGUI extends JFrame {
 	private JTextField rentalsSubTitle;
 	private JTextField customerSubTitle;
 	private JTextField reportSubTitle;
-	private JTextArea txtAreaReport;
+	private JTextArea rentaltxtAreaReport;
+	private JTextArea equipmenttxtAreaReport;
+	private JTextArea customertxtAreaReport;
+	private JTextArea waitlisttxtAreaReport;
 	private RentalDriver rentalDriver;
+	
 
 	public OutdoorGUI(RentalDriver rentalDriver) {
 		this.rentalDriver = rentalDriver;
+
 		initialize();
 	}
 
 	private void initialize() {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		getContentPane().setBackground(new Color(244, 164, 96));
+		getContentPane().setBackground(new Color(85, 107, 47));
 		setBounds(100, 100, 804, 835);
 		getContentPane().setLayout(null);
 
@@ -38,112 +43,112 @@ public class OutdoorGUI extends JFrame {
 		outdoorRentalsTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		outdoorRentalsTitle.setFont(new Font("Lucida Sans", Font.PLAIN, 21));
 		outdoorRentalsTitle.setText("Outdoor Rentals");
-		outdoorRentalsTitle.setBounds(135, 10, 199, 45);
+		outdoorRentalsTitle.setBounds(259, 10, 274, 45);
 		getContentPane().add(outdoorRentalsTitle);
 		outdoorRentalsTitle.setColumns(10);
 
 		rentalsSubTitle = new JTextField();
-		rentalsSubTitle.setBackground(new Color(255, 0, 0));
+		rentalsSubTitle.setBackground(new Color(184, 134, 11));
 		rentalsSubTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		rentalsSubTitle.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
 		rentalsSubTitle.setText("Rentals");
-		rentalsSubTitle.setBounds(20, 78, 115, 35);
+		rentalsSubTitle.setBounds(78, 78, 115, 35);
 		getContentPane().add(rentalsSubTitle);
 		rentalsSubTitle.setColumns(10);
 
 		customerSubTitle = new JTextField();
-		customerSubTitle.setBackground(new Color(255, 0, 0));
+		customerSubTitle.setBackground(new Color(184, 134, 11));
 		customerSubTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		customerSubTitle.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
 		customerSubTitle.setText("Customers");
-		customerSubTitle.setBounds(162, 78, 115, 35);
+		customerSubTitle.setBounds(342, 78, 115, 35);
 		getContentPane().add(customerSubTitle);
 		customerSubTitle.setColumns(10);
 
 		reportSubTitle = new JTextField();
-		reportSubTitle.setBackground(new Color(255, 0, 0));
+		reportSubTitle.setBackground(new Color(184, 134, 11));
 		reportSubTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		reportSubTitle.setFont(new Font("Lucida Sans", Font.PLAIN, 12));
 		reportSubTitle.setText("Reports");
-		reportSubTitle.setBounds(298, 78, 115, 35);
+		reportSubTitle.setBounds(585, 78, 115, 35);
 		getContentPane().add(reportSubTitle);
 		reportSubTitle.setColumns(10);
 
 		JButton buttonAddEquipment = new JButton("Add Equipment");
 		buttonAddEquipment.setFont(new Font("Lucida Sans", Font.PLAIN, 10));
-		buttonAddEquipment.setBackground(new Color(204, 153, 51));
+		buttonAddEquipment.setBackground(new Color(255, 228, 181));
 		buttonAddEquipment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addEquipmentItem();
 			}
 		});
-		buttonAddEquipment.setBounds(10, 138, 115, 21);
+		buttonAddEquipment.setBounds(61, 135, 149, 21);
 		getContentPane().add(buttonAddEquipment);
 
 		JButton buttonRemoveEquipment = new JButton("Remove Equipment");
 		buttonRemoveEquipment.setFont(new Font("Lucida Sans", Font.PLAIN, 10));
-		buttonRemoveEquipment.setBackground(new Color(204, 153, 51));
+		buttonRemoveEquipment.setBackground(new Color(255, 228, 181));
 		buttonRemoveEquipment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				removeEquipmentItem();
 			}
 		});
-		buttonRemoveEquipment.setBounds(10, 166, 123, 21);
+		buttonRemoveEquipment.setBounds(61, 166, 149, 21);
 		getContentPane().add(buttonRemoveEquipment);
 
 		JButton buttonAddCustomer = new JButton("Add Customer");
 		buttonAddCustomer.setFont(new Font("Lucida Sans", Font.PLAIN, 10));
-		buttonAddCustomer.setBackground(new Color(204, 153, 51));
+		buttonAddCustomer.setBackground(new Color(255, 228, 181));
 		buttonAddCustomer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addCustomer();
 			}
 		});
-		buttonAddCustomer.setBounds(154, 138, 123, 21);
+		buttonAddCustomer.setBounds(327, 135, 147, 21);
 		getContentPane().add(buttonAddCustomer);
 
 		JButton buttonRemoveCustomer = new JButton("Remove Customer");
 		buttonRemoveCustomer.setFont(new Font("Lucida Sans", Font.PLAIN, 10));
-		buttonRemoveCustomer.setBackground(new Color(204, 153, 51));
+		buttonRemoveCustomer.setBackground(new Color(255, 228, 181));
 		buttonRemoveCustomer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				removeCustomer();
 			}
 		});
-		buttonRemoveCustomer.setBounds(145, 166, 132, 21);
+		buttonRemoveCustomer.setBounds(327, 166, 147, 21);
 		getContentPane().add(buttonRemoveCustomer);
 
 		JButton buttonAddToWaitlist = new JButton("Add to Waitlist");
 		buttonAddToWaitlist.setFont(new Font("Lucida Sans", Font.PLAIN, 10));
-		buttonAddToWaitlist.setBackground(new Color(204, 153, 51));
+		buttonAddToWaitlist.setBackground(new Color(255, 228, 181));
 		buttonAddToWaitlist.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addToWaitlist();
 			}
 		});
-		buttonAddToWaitlist.setBounds(154, 195, 123, 21);
+		buttonAddToWaitlist.setBounds(327, 197, 147, 21);
 		getContentPane().add(buttonAddToWaitlist);
 
 		JButton buttonRentEquipment = new JButton("Rent Equipment");
 		buttonRentEquipment.setFont(new Font("Lucida Sans", Font.PLAIN, 10));
-		buttonRentEquipment.setBackground(new Color(204, 153, 51));
+		buttonRentEquipment.setBackground(new Color(255, 228, 181));
 		buttonRentEquipment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				rentEquipment();
 			}
 		});
-		buttonRentEquipment.setBounds(12, 195, 123, 21);
+		buttonRentEquipment.setBounds(61, 197, 149, 21);
 		getContentPane().add(buttonRentEquipment);
 		
 		JButton buttonReturnEquipment = new JButton("Return Equipment");
 		buttonReturnEquipment.setFont(new Font("Lucida Sans", Font.PLAIN, 10));
-		buttonReturnEquipment.setBackground(new Color(204, 153, 51));
+		buttonReturnEquipment.setBackground(new Color(255, 228, 181));
 		buttonReturnEquipment.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		        returnEquipment();
 		    }
 		});
-		buttonReturnEquipment.setBounds(10, 226, 140, 21);
+		buttonReturnEquipment.setBounds(61, 226, 149, 21);
 		getContentPane().add(buttonReturnEquipment);
 
 		JButton buttonRentalReport = new JButton("Rental Report");
@@ -154,15 +159,15 @@ public class OutdoorGUI extends JFrame {
 				rentalReport();
 			}
 		});
-		buttonRentalReport.setBounds(297, 141, 140, 18);
+		buttonRentalReport.setBounds(575, 134, 147, 22);
 		getContentPane().add(buttonRentalReport);
 
-		txtAreaReport = new JTextArea();
-		txtAreaReport.setTabSize(4);
-		txtAreaReport.setBounds(20, 266, 565, 498);
-		txtAreaReport.setEditable(false);
-		getContentPane().add(txtAreaReport);
-
+		rentaltxtAreaReport = new JTextArea();
+		rentaltxtAreaReport.setTabSize(4);
+		rentaltxtAreaReport.setBounds(20, 266, 745, 498);
+		rentaltxtAreaReport.setEditable(false);
+		getContentPane().add(rentaltxtAreaReport);
+		
 		JButton buttonEquipmentReport = new JButton("Equipment Report");
 		buttonEquipmentReport.setFont(new Font("Lucida Sans", Font.PLAIN, 10));
 		buttonEquipmentReport.setBackground(new Color(255, 222, 173));
@@ -171,14 +176,14 @@ public class OutdoorGUI extends JFrame {
 				equipmentReport();
 			}
 		});
-		buttonEquipmentReport.setBounds(298, 166, 140, 21);
+		buttonEquipmentReport.setBounds(575, 166, 147, 21);
 		getContentPane().add(buttonEquipmentReport);
 
-		txtAreaReport = new JTextArea();
-		txtAreaReport.setTabSize(4);
-		txtAreaReport.setBounds(20, 266, 509, 498);
-		txtAreaReport.setEditable(false);
-		getContentPane().add(txtAreaReport);
+		equipmenttxtAreaReport = new JTextArea();
+		equipmenttxtAreaReport.setTabSize(4);
+		equipmenttxtAreaReport.setBounds(20, 266, 745, 498);
+		equipmenttxtAreaReport.setEditable(false);
+		getContentPane().add(equipmenttxtAreaReport);
 
 		JButton buttonCustomerReport = new JButton("Customer Report");
 		buttonCustomerReport.setFont(new Font("Lucida Sans", Font.PLAIN, 10));
@@ -188,14 +193,14 @@ public class OutdoorGUI extends JFrame {
 				customerReport();
 			}
 		});
-		buttonCustomerReport.setBounds(297, 197, 140, 21);
+		buttonCustomerReport.setBounds(575, 197, 147, 21);
 		getContentPane().add(buttonCustomerReport);
 
-		txtAreaReport = new JTextArea();
-		txtAreaReport.setTabSize(4);
-		txtAreaReport.setBounds(20, 266, 509, 429);
-		txtAreaReport.setEditable(false);
-		getContentPane().add(txtAreaReport);
+		customertxtAreaReport = new JTextArea();
+		customertxtAreaReport.setTabSize(4);
+		customertxtAreaReport.setBounds(20, 266, 745, 498);
+		customertxtAreaReport.setEditable(false);
+		getContentPane().add(customertxtAreaReport);
 
 		JButton buttonWaitlistReport = new JButton("Waitlist Report");
 		buttonWaitlistReport.setFont(new Font("Lucida Sans", Font.PLAIN, 10));
@@ -205,44 +210,59 @@ public class OutdoorGUI extends JFrame {
 				waitlistReport();
 			}
 		});
-		buttonWaitlistReport.setBounds(298, 226, 140, 21);
+		buttonWaitlistReport.setBounds(575, 226, 147, 21);
 		getContentPane().add(buttonWaitlistReport);
 
-		txtAreaReport = new JTextArea();
-		txtAreaReport.setTabSize(4);
-		txtAreaReport.setBounds(20, 266, 509, 429);
-		txtAreaReport.setEditable(false);
-		getContentPane().add(txtAreaReport);
+		waitlisttxtAreaReport = new JTextArea();
+		waitlisttxtAreaReport.setTabSize(4);
+		waitlisttxtAreaReport.setBounds(20, 266, 745, 498);
+		waitlisttxtAreaReport.setEditable(false);
+		getContentPane().add(waitlisttxtAreaReport);
 		
 		JButton buttonRemoveFromWaitlist = new JButton("Remove from Waitlist");
 		buttonRemoveFromWaitlist.setFont(new Font("Lucida Sans", Font.PLAIN, 10));
-		buttonRemoveFromWaitlist.setBackground(new Color(204, 153, 51));
+		buttonRemoveFromWaitlist.setBackground(new Color(255, 228, 181));
 		buttonRemoveFromWaitlist.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		        removeFromWaitlist();
 		    }
 		});
-		buttonRemoveFromWaitlist.setBounds(145, 226, 140, 21);
+		buttonRemoveFromWaitlist.setBounds(327, 228, 147, 21);
 		getContentPane().add(buttonRemoveFromWaitlist);
 	}
-
+	
 	private void addEquipmentItem() {
-		String rentalType = JOptionPane.showInputDialog(this, "Enter rental type");
-		String name = JOptionPane.showInputDialog(this, "Enter equipment name");
+	    String equipmentIDString = JOptionPane.showInputDialog(this, "Enter equipment ID");
+	    String rentalType = JOptionPane.showInputDialog(this, "Enter rental type");
+	    String name = JOptionPane.showInputDialog(this, "Enter equipment name");
 
-		if (rentalType != null && name != null && !rentalType.isEmpty() && !name.isEmpty()) {
-			if (rentalType.length() <= 30 && name.length() <= 30) {
-				rentalDriver.addEquipment(rentalType, name);
-				JOptionPane.showMessageDialog(this, "Rental item has been added successfully.", "Success",
-						JOptionPane.INFORMATION_MESSAGE);
-			} else {
-				JOptionPane.showMessageDialog(this, "Rental name must be less than 30 characters.", "Error",
-						JOptionPane.ERROR_MESSAGE);
-			}
-		} else {
-			JOptionPane.showMessageDialog(this, "Rental item not added because of invalid input.", "Error",
-					JOptionPane.ERROR_MESSAGE);
-		}
+	    if (equipmentIDString != null && rentalType != null && name != null && !equipmentIDString.isEmpty() && !rentalType.isEmpty() && !name.isEmpty()) {
+	        try {
+	            int equipmentID = Integer.parseInt(equipmentIDString);
+	            if (equipmentID > 0 && rentalType.length() <= 30 && name.length() <= 30) {
+	                
+	                if (rentalDriver.equipmentID(equipmentID)) {
+	                    
+	                    rentalDriver.addEquipment(equipmentID, rentalType, name);
+	                    JOptionPane.showMessageDialog(this, "Rental item has been added successfully.", "Success",
+	                            JOptionPane.INFORMATION_MESSAGE);
+	                } else {
+	                    
+	                    JOptionPane.showMessageDialog(this, "Equipment ID is already taken. Please choose a different one.", "Error",
+	                            JOptionPane.ERROR_MESSAGE);
+	                }
+	            } else {
+	                JOptionPane.showMessageDialog(this, "Equipment ID must be above zero and rental & type must be less than 30 characters.", "Error",
+	                        JOptionPane.ERROR_MESSAGE);
+	            }
+	        } catch (NumberFormatException e) {
+	            JOptionPane.showMessageDialog(this, "Equipment ID must be a positive number.", "Error",
+	                    JOptionPane.ERROR_MESSAGE);
+	        }
+	    } else {
+	        JOptionPane.showMessageDialog(this, "Invalid input, item not added.", "Error",
+	                JOptionPane.ERROR_MESSAGE);
+	    }
 	}
 
 	private void removeEquipmentItem() {
@@ -348,6 +368,7 @@ public class OutdoorGUI extends JFrame {
 			JOptionPane.showMessageDialog(this, "Invalid input. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
+	
 
 	public void addToWaitlist() {
 		String equipmentIdMessage = JOptionPane.showInputDialog(null, "Enter equipment ID");
@@ -396,7 +417,8 @@ public class OutdoorGUI extends JFrame {
 	private Rental getRentalById(int equipmentId) { // this was set as rentalID and changed it to equipmentID
 		LinkedList<Rental> rentalList = rentalDriver.getEquipmentList();
 		for (Rental rental : rentalList) {
-			if (rental.getEquipmentID().peek() == equipmentId) {
+			if (rental.getEquipmentID().contains(equipmentId)) {
+				
 				return rental;
 			}
 		}
@@ -413,7 +435,7 @@ public class OutdoorGUI extends JFrame {
 
 	private void viewCustomers() {
 		StringBuilder report = new StringBuilder("Customers -\n");
-		for (Map.Entry<Integer, List<Customer>> entry : rentalDriver.getRentalCustomerMap().entrySet()) {
+		for (Map.Entry<Integer, List<Customer>> entry : rentalDriver.getRentalCustomerMap().entrySet()) {	
 			int equipmentId = entry.getKey();
 			List<Customer> customers = entry.getValue();
 			report.append("Equipment ID: ").append(equipmentId).append("\n");
@@ -446,43 +468,45 @@ public class OutdoorGUI extends JFrame {
 	}
 
 	private void rentalReport() {
-		rentalDriver.displayReport(txtAreaReport);
-		txtAreaReport.setText("");
+		rentalDriver.displayReport(rentaltxtAreaReport);
+		rentaltxtAreaReport.setText("");
 
-		txtAreaReport.append("Rented Items Report\n");
-		txtAreaReport.append(rentalDriver.createRentedItemsReport() + "\n\n");
+		rentaltxtAreaReport.append("Rented Items Report\n");
+		rentaltxtAreaReport.append(rentalDriver.createRentedItemsReport() + "\n\n");
 
 	}
 
 	private void equipmentReport() {
-		rentalDriver.displayReport(txtAreaReport);
-		txtAreaReport.setText("");
+		rentalDriver.displayReport(equipmenttxtAreaReport);
+		equipmenttxtAreaReport.setText("");
 
-		txtAreaReport.append("Equipment Report\n");
-		txtAreaReport.append(rentalDriver.createEquipmentReport() + "\n\n");
+		equipmenttxtAreaReport.append("Equipment Report\n");
+		equipmenttxtAreaReport.append(rentalDriver.createEquipmentReport() + "\n\n");
 
 	}
 
 	private void customerReport() {
-		rentalDriver.displayReport(txtAreaReport);
-		txtAreaReport.setText("");
+		rentalDriver.displayReport(customertxtAreaReport);
+		customertxtAreaReport.setText("");
 
-		txtAreaReport.append("Customer Report\n");
-		txtAreaReport.append(rentalDriver.createCustomerReport() + "\n\n");
+		customertxtAreaReport.append("Customer Report\n");
+		customertxtAreaReport.append(rentalDriver.createCustomerReport() + "\n\n");
 
 	}
 
 	private void waitlistReport() {
-		rentalDriver.displayReport(txtAreaReport);
-		txtAreaReport.setText("");
+		rentalDriver.displayReport(waitlisttxtAreaReport);
+		waitlisttxtAreaReport.setText("");
 
-		txtAreaReport.append("Waitlist Report\n");
-		txtAreaReport.append(rentalDriver.createWaitlistReport() + "\n\n");
+		waitlisttxtAreaReport.append("Waitlist Report\n");
+		waitlisttxtAreaReport.append(rentalDriver.createWaitlistReport() + "\n\n");
 
 	}
 
 	public static void main(String[] args) {
 		RentalDriver rentalDriver = new RentalDriver();
+		
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {

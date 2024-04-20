@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
 
-class RentalDriver {
+public class RentalDriver {
 
 	private LinkedList<Rental> equipmentList;
 	private LinkedList<Customer> customerList;
@@ -44,41 +44,98 @@ class RentalDriver {
     private void populateEquipmentList() {
     	Rental kayak1 = new Rental("Single Kayak", "Pelican");
         equipmentList.add(kayak1);
+        kayak1.setEquipmentID(14);
 
         Rental kayak2 = new Rental("Double Kayak", "Pelican2");
         equipmentList.add(kayak2);
-
+        kayak2.setEquipmentID(2);
+        
         Rental bike1 = new Rental("Mountain Bike", "Giant");
         equipmentList.add(bike1);
-
+        bike1.setEquipmentID(1);
+        
         Rental bike2 = new Rental("Mountain Bike", "Trek");
         equipmentList.add(bike2);
-
+        bike2.setEquipmentID(14);
+        
         Rental tent = new Rental("Tent", "Coleman");
         equipmentList.add(tent);
+        tent.setEquipmentID(3);
 
+        Rental cooler1 = new Rental("Cooler", "RTIC");
+        equipmentList.add(cooler1);
+        cooler1.setEquipmentID(6);
+
+        Rental cooler2 = new Rental("Cooler", "Yeti");
+        equipmentList.add(cooler2);
+        cooler2.setEquipmentID(12);
+
+        Rental generator1 = new Rental("Portable Generator", "Yamaha");
+        equipmentList.add(generator1);
+        generator1.setEquipmentID(7);
+
+        Rental generator2 = new Rental("Portable Generator", "Generac");
+        equipmentList.add(generator2);
+        generator2.setEquipmentID(9);
         
+        Rental canoe1= new Rental("Canoe", "Clipper");
+        equipmentList.add(canoe1);
+        canoe1.setEquipmentID(5);
+
+        Rental canoe2 = new Rental("Canoe", "Old Town");
+        equipmentList.add(canoe2);
+        canoe2.setEquipmentID(11);
+        
+        Rental canoe3 = new Rental("Canoe", "Mad River");
+        equipmentList.add(canoe3);
+        canoe3.setEquipmentID(8);
+
+
 
         kayak1.rentOut(1);
         bike1.rentOut(5);
+        cooler2.rentOut(3);
+        canoe1.rentOut(4);
         tent.rentOut(1);
+        generator2.rentOut(1);
         
         kayak1.addToWaitlist(1,2);
         kayak1.addToWaitlist(1,3);
         
+        canoe1.addToWaitlist(11,5);
+        canoe1.addToWaitlist(11,4);
+        canoe1.addToWaitlist(11,6);
+        
+        
+        cooler2.addToWaitlist(8,2);
+        cooler2.addToWaitlist(1,3);
+        
+     
+        
     }
 
     private void populateCustomerList() {
-        customerList.add(new Customer("Leslie Hill", 37, "YY123AA12", "641-555-1234"));
+    	customerList.add(new Customer("Leslie Hill", 37, "YY123AA12", "641-555-1234"));
         customerList.add(new Customer("Brandy Brown", 29, "YY456AA34", "641-555-2345"));
         customerList.add(new Customer("Thomas Underwood", 27, "YY789AA56", "641-555-4321"));
+        customerList.add(new Customer("Shawn McKanich", 30, "YY987AA78", "641-555-3456"));
+        customerList.add(new Customer("Bobby Tutor", 23, "YY765AA89", "641-555-6543"));
+        customerList.add(new Customer("Fletcher Flynn", 25, "YY654AA78", "641-555-5678"));
+        customerList.add(new Customer("Bill Brown", 56, "YY543AA67", "641-555-8765"));
+        customerList.add(new Customer("Valerie Underwood", 38, "YY432AA67", "641-555-9876"));
+        customerList.add(new Customer("Linda Greiner", 49, "YY321AA54", "641-555-4836"));
   
     }	
 
 
-    public void addEquipment(String equipmentType, String equipmentName) {
+    /*public void addEquipment(String equipmentType, String equipmentName) {
         Rental equipment = new Rental(equipmentType, equipmentName); 
         equipmentList.add(equipment); 
+    }*/
+    public void addEquipment(int equipmentID, String equipmentType, String equipmentName) {
+        Rental equipment = new Rental(equipmentType, equipmentName);
+        equipment.setEquipmentID(equipmentID); 
+        equipmentList.add(equipment);
     }
 
     public boolean removeEquipment(int equipmentId) {
@@ -114,6 +171,18 @@ class RentalDriver {
             }
         }
         System.out.println("Equipment is not found or already rented.");
+    }
+    
+    public boolean equipmentID(int equipmentID) {
+        for (Rental rental : equipmentList) {
+            LinkedList<Integer> equipmentIDs = rental.getEquipmentID();
+            for (Integer id : equipmentIDs) {
+                if (id == equipmentID) {
+                    return false; 
+                }
+            }
+        }
+        return true; 
     }
     
     public void setCustomerList(LinkedList<Customer> customerList) {
@@ -152,7 +221,7 @@ class RentalDriver {
         return null;
     }
     
-    private Customer findCustomerById(int customerId) {
+   private Customer findCustomerById(int customerId) {
         for (Customer customer : customerList) {
             if (customer.getCustomerID() == customerId) {
                 return customer;
@@ -172,15 +241,15 @@ class RentalDriver {
    
    }
     
-    public String createRentedItemsReport() {		//should this be added to display reports instead?
-        StringBuilder report = new StringBuilder("Rentals -\n");
+    public String createRentedItemsReport() {
+        StringBuilder report = new StringBuilder("Rented Items -\n");
         for (Rental rental : equipmentList) {
             if (rental.isRented()) {
-                //report.append(rental.generateRentalReport()).append("\n");
-            	report.append(rental.toString()).append("\n");
+                report.append(rental.toString()).append("\n");
             }
         }
         return report.toString();
+    
     }
 
     public String createEquipmentReport() {
