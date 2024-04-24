@@ -81,6 +81,24 @@ public class Customer {
         return customerMap.get(customerID);
     }
     
+    //map methods
+    public static void addCustomer(Customer customer) {
+        customerMap.put(customer.getCustomerID(), customer);
+    }
+
+    public static Customer removeCustomer(int customerID) {
+        return customerMap.remove(customerID);
+    }
+
+    public static int getCount() {
+        return customerMap.size();
+    }
+
+    public static boolean containsKey(int customerID) {
+        return customerMap.containsKey(customerID);
+    }
+    
+    
     @Override
     public String toString() {
         return "Customer ID: " + customerID + ", Name: " + customerName + ", Age: " + age + ", License ID: " + licenseId

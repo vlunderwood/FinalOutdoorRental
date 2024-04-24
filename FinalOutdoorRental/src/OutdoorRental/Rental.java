@@ -20,8 +20,6 @@ public class Rental {
 
 	public Rental(String equipmentType, String equipmentName) {
 		this.equipmentID = new LinkedList<>();
-		//this.equipmentID = new equipmentID;
-		//this.equipmentID.add(lastEquipmentID++);
 		this.equipmentType = equipmentType;
 		this.equipmentName = equipmentName;
 		this.isRented = false;
@@ -88,11 +86,9 @@ public class Rental {
 
 	
 	
-	public int getEquipmentIDList() {	//used rentaldriver rentEquipment
+	public int getEquipmentIDList() {	
 		return equipmentID.peek();
 	}
-
-
 
 
 	//methods for LinkedList
@@ -112,7 +108,7 @@ public class Rental {
 		if (isEmpty()) {
 			throw new QueueEmptyException("Queue based Linked list is empty");
 		}
-		return equipmentID.peek(); // changed for test
+		return equipmentID.peek(); 
 	}
 
 	public int dequeue() throws QueueEmptyException {
@@ -124,13 +120,8 @@ public class Rental {
 
 	public void enqueue(int item) {
 		equipmentID.addLast(item);
-		// equipmentID.addFirst(item); //changed for test
+		
 	}
-
-	
-	
-	
-	
 	
 	public Map<Integer, Queue<Integer>> getWaitlist() {
 		return waitlist;
@@ -165,13 +156,15 @@ public class Rental {
 		}
 	}
 	
-
-	public void removeFromWaitlist(int customerId) {
-		for (Queue<Integer> queue : waitlist.values()) {
-			queue.remove(customerId);
-		}
+	public boolean removeFromWaitlist(int equipmentId, int customerId) {
+	    Queue<Integer> queue = waitlist.get(equipmentId);
+	    if (queue != null) {
+	        queue.remove(customerId);
+	    } else {
+	        System.out.println("Equipment ID not found or customer is not on the waitlist for this equipment.");
+	    }
+	    return true; 
 	}
-
 	public boolean hasWaitlist() {
 		return !waitlist.isEmpty();
 	}
@@ -200,10 +193,10 @@ public class Rental {
 		return "Equipment ID: " + equipmentID.peek() + "   Name: " + equipmentName + "   Equipment Type: "
 				+ equipmentType + "   Rented: " + isRented;
 	}
-
+	
 	public String generateRentalReport() {
 		if (isRented) {
-			return "Equipment ID: " + getEquipmentID() + ", Equipment Name: " + getEquipmentName() + ", Customer ID: "
+			return "Equipment ID: " + getEquipmentID() + ", Equipment Name: " + getEquipmentName() +  ", Equipment Type: " + getEquipmentType() +", Customer ID: "
 					+ customerID;
 		}
 		return "";
