@@ -79,7 +79,7 @@ public class OutdoorGUI extends JFrame {
 		buttonAddEquipment.setBackground(new Color(255, 228, 181));
 		buttonAddEquipment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				addEquipmentItem();
+				addEquipment();
 			}
 		});
 		buttonAddEquipment.setBounds(61, 135, 149, 21);
@@ -90,7 +90,7 @@ public class OutdoorGUI extends JFrame {
 		buttonRemoveEquipment.setBackground(new Color(255, 228, 181));
 		buttonRemoveEquipment.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				removeEquipmentItem();
+				removeEquipment();
 			}
 		});
 		buttonRemoveEquipment.setBounds(61, 166, 149, 21);
@@ -231,7 +231,7 @@ public class OutdoorGUI extends JFrame {
 		getContentPane().add(buttonRemoveFromWaitlist);
 	}
 	
-	private void addEquipmentItem() {
+	public void addEquipment() {
 	    String equipmentIDString = JOptionPane.showInputDialog(this, "Enter equipment ID");
 	    String rentalType = JOptionPane.showInputDialog(this, "Enter rental type");
 	    String name = JOptionPane.showInputDialog(this, "Enter equipment name");
@@ -265,7 +265,7 @@ public class OutdoorGUI extends JFrame {
 	    }
 	}
 
-	private void removeEquipmentItem() {
+	public void removeEquipment() {
 		String rentalIdMessage = JOptionPane.showInputDialog(this, "Enter rental ID");
 		if (rentalIdMessage != null && !rentalIdMessage.isEmpty()) {
 			try {
@@ -280,6 +280,74 @@ public class OutdoorGUI extends JFrame {
 				JOptionPane.showMessageDialog(this, "Invalid rental ID. Please try again. ", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
+	}
+	public void rentEquipment() {
+	    try {
+	        int equipmentID = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter equipment ID"));
+	        int customerID = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter customer ID"));
+
+	        Rental rental = rentalDriver.findRentalById(equipmentID);
+	        if (rental == null) {
+	            JOptionPane.showMessageDialog(this, "Equipment with ID " + equipmentID + " does not exist.", "Error", JOptionPane.ERROR_MESSAGE);
+	            return; 
+	        }
+	        Customer customer = rentalDriver.findCustomerById(customerID);
+	        if (customer == null) {
+	            JOptionPane.showMessageDialog(this, "Customer with ID " + customerID + " does not exist.", "Error", JOptionPane.ERROR_MESSAGE);
+	            return; 
+	        }
+	        if (rental.getIsRented()) {
+	            JOptionPane.showMessageDialog(this, "Equipment is already rented.", "Error", JOptionPane.ERROR_MESSAGE);
+	            return; 
+	        }
+
+	        rentalDriver.rentEquipment(equipmentID, customerID);
+	        JOptionPane.showMessageDialog(this, "Equipment has been rented successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+	    } catch (NumberFormatException ex) {
+	        JOptionPane.showMessageDialog(this, "Invalid input. Please enter valid numbers for equipment ID and customer ID.", "Error", JOptionPane.ERROR_MESSAGE);
+	    }
+	}
+
+	public void returnEquipment() {
+		try {
+			int equipmentID = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter equipment ID"));
+			Rental rental = getRentalById(equipmentID);
+			if (rental != null && rental.getIsRented()) {
+				rental.returnItem();
+
+				if (rental.hasWaitlist()) {
+					JOptionPane.showMessageDialog(this, "Item has a waitlist. Please notify the next customer in line.", "Success",
+							JOptionPane.INFORMATION_MESSAGE);
+				}
+
+				JOptionPane.showMessageDialog(this, "Equipment returned successfully.", "Success",
+						JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				JOptionPane.showMessageDialog(this, "Equipment is not found or not rented.", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		} catch (NumberFormatException ex) {
+			JOptionPane.showMessageDialog(this, "Invalid input. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	public Rental getRentalById(int equipmentId) { 
+		LinkedList<Rental> rentalList = rentalDriver.getEquipmentList();
+		for (Rental rental : rentalList) {
+			if (rental.getEquipmentID().contains(equipmentId)) {
+				
+				return rental;
+			}
+		}
+		return null;
+	}
+
+	public void viewRentals() {
+		StringBuilder report = new StringBuilder("Equipment -\n");
+		for (Rental rental : rentalDriver.getEquipmentList()) {
+			report.append(rental.toString()).append("\n");
+		}
+		JOptionPane.showMessageDialog(this, report.toString(), "Rentals Report", JOptionPane.PLAIN_MESSAGE);
 	}
 
 	public void addCustomer() {
@@ -333,56 +401,21 @@ public class OutdoorGUI extends JFrame {
 			}
 		}
 	}
-
-	private void rentEquipment() {
-	    try {
-	        int equipmentID = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter equipment ID"));
-	        int customerID = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter customer ID"));
-
-	        Rental rental = rentalDriver.findRentalById(equipmentID);
-	        if (rental == null) {
-	            JOptionPane.showMessageDialog(this, "Equipment with ID " + equipmentID + " does not exist.", "Error", JOptionPane.ERROR_MESSAGE);
-	            return; 
-	        }
-	        Customer customer = rentalDriver.findCustomerById(customerID);
-	        if (customer == null) {
-	            JOptionPane.showMessageDialog(this, "Customer with ID " + customerID + " does not exist.", "Error", JOptionPane.ERROR_MESSAGE);
-	            return; 
-	        }
-	        if (rental.isRented()) {
-	            JOptionPane.showMessageDialog(this, "Equipment is already rented.", "Error", JOptionPane.ERROR_MESSAGE);
-	            return; 
-	        }
-
-	        rentalDriver.rentEquipment(equipmentID, customerID);
-	        JOptionPane.showMessageDialog(this, "Equipment has been rented successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
-	    } catch (NumberFormatException ex) {
-	        JOptionPane.showMessageDialog(this, "Invalid input. Please enter valid numbers for equipment ID and customer ID.", "Error", JOptionPane.ERROR_MESSAGE);
-	    }
-	}
-
-	private void returnEquipment() {
-		try {
-			int equipmentID = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter equipment ID"));
-			Rental rental = getRentalById(equipmentID);
-			if (rental != null && rental.isRented()) {
-				rental.returnItem();
-
-				if (rental.hasWaitlist()) {
-					JOptionPane.showMessageDialog(this, "Item has a waitlist. Please notify the next customer in line.", "Success",
-							JOptionPane.INFORMATION_MESSAGE);
-				}
-
-				JOptionPane.showMessageDialog(this, "Equipment returned successfully.", "Success",
-						JOptionPane.INFORMATION_MESSAGE);
-			} else {
-				JOptionPane.showMessageDialog(this, "Equipment is not found or not rented.", "Error",
-						JOptionPane.ERROR_MESSAGE);
+	
+	public void viewCustomers() {
+		StringBuilder report = new StringBuilder("Customers -\n");
+		for (Map.Entry<Integer, List<Customer>> entry : rentalDriver.getRentalCustomerMap().entrySet()) {	
+			int equipmentId = entry.getKey();
+			List<Customer> customers = entry.getValue();
+			report.append("Equipment ID: ").append(equipmentId).append("\n");
+			for (Customer customer : customers) {
+				report.append(customer.toString()).append("\n");
 			}
-		} catch (NumberFormatException ex) {
-			JOptionPane.showMessageDialog(this, "Invalid input. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
 		}
+		JOptionPane.showMessageDialog(this, report.toString(), "Customers Report", JOptionPane.PLAIN_MESSAGE);
 	}
+
+	
 	public void addToWaitlist() {
 	    String equipmentIdMessage = JOptionPane.showInputDialog(null, "Enter equipment ID");
 	    if (equipmentIdMessage != null && !equipmentIdMessage.isEmpty()) {
@@ -418,7 +451,7 @@ public class OutdoorGUI extends JFrame {
 	    }
 	}
 
-	private void removeFromWaitlist() {
+	public void removeFromWaitlist() {
 	    String equipmentIdMessage = JOptionPane.showInputDialog(null, "Enter equipment ID");
 	    if (equipmentIdMessage != null && !equipmentIdMessage.isEmpty()) {
 	        try {
@@ -464,39 +497,7 @@ public class OutdoorGUI extends JFrame {
 	    }
 	}
 
-	private Rental getRentalById(int equipmentId) { 
-		LinkedList<Rental> rentalList = rentalDriver.getEquipmentList();
-		for (Rental rental : rentalList) {
-			if (rental.getEquipmentID().contains(equipmentId)) {
-				
-				return rental;
-			}
-		}
-		return null;
-	}
-
-	private void viewRentals() {
-		StringBuilder report = new StringBuilder("Equipment -\n");
-		for (Rental rental : rentalDriver.getEquipmentList()) {
-			report.append(rental.toString()).append("\n");
-		}
-		JOptionPane.showMessageDialog(this, report.toString(), "Rentals Report", JOptionPane.PLAIN_MESSAGE);
-	}
-
-	private void viewCustomers() {
-		StringBuilder report = new StringBuilder("Customers -\n");
-		for (Map.Entry<Integer, List<Customer>> entry : rentalDriver.getRentalCustomerMap().entrySet()) {	
-			int equipmentId = entry.getKey();
-			List<Customer> customers = entry.getValue();
-			report.append("Equipment ID: ").append(equipmentId).append("\n");
-			for (Customer customer : customers) {
-				report.append(customer.toString()).append("\n");
-			}
-		}
-		JOptionPane.showMessageDialog(this, report.toString(), "Customers Report", JOptionPane.PLAIN_MESSAGE);
-	}
-
-	private void viewWaitlist() {
+	public void viewWaitlist() {
 		StringBuilder report = new StringBuilder("Waitlist -\n");
 		for (Rental rental : rentalDriver.getEquipmentList()) {
 			Integer equipmentId = rental.getEquipmentID().peek();

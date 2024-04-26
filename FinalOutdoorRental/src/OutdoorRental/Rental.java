@@ -16,7 +16,7 @@ public class Rental {
 	private boolean isRented;
 	private Map<Integer, Queue<Integer>> waitlist = new HashMap<>();
 	private int customerID;
-	private LinkedList<Customer> customerList;
+
 
 	public Rental(String equipmentType, String equipmentName) {
 		this.equipmentID = new LinkedList<>();
@@ -26,24 +26,13 @@ public class Rental {
 		this.customerID = -1;
 	}
 
-	// getters & setters
-
+	// getters 
 	public static int getLastEquipmentID() {
 		return lastEquipmentID;
 	}
 
-	public static void setLastEquipmentID(int lastEquipmentID) {
-		Rental.lastEquipmentID = lastEquipmentID;
-	}
-
 	public LinkedList<Integer> getEquipmentID() {
 		return equipmentID;
-	}
-
-	
-	public void setEquipmentID(int newEquipmentID) {
-	    this.equipmentID.add(newEquipmentID); 
-	    lastEquipmentID++; 
 	}
 
 	public String getEquipmentName() {
@@ -52,42 +41,43 @@ public class Rental {
 	public String getEquipmentType() {
 		return equipmentType;
 	}
+	
+	public int getEquipmentIDList() {	
+		return equipmentID.peek();
+	}
+	
+	public Map<Integer, Queue<Integer>> getWaitlist() {
+		return waitlist;
+	}
+	
+	public boolean getIsRented() {
+	    return isRented;
+	}
+	
+	//setters
+	public static void setLastEquipmentID(int lastEquipmentID) {
+		Rental.lastEquipmentID = lastEquipmentID;
+	}
+	
+	public void setEquipmentID(int newEquipmentID) {
+	    this.equipmentID.add(newEquipmentID); 
+	    lastEquipmentID++; 
+	}
 
 	public void setEquipmentName(String equipmentName) {
 		this.equipmentName = equipmentName;
 	}
-
-	public LinkedList<Customer> getCustomerList() {
-		return customerList;
-	}
-
-	public void setCustomerList(LinkedList<Customer> customerList) {
-		this.customerList = customerList;
-	}
-
 	
-
 	public void setEquipmentType(String equipmentType) {
 		this.equipmentType = equipmentType;
 	}
-
-	public void setRented(boolean isRented) {
-		this.isRented = isRented;
-	}
-
+	
 	public void setWaitlist(Map<Integer, Queue<Integer>> waitlist) {
 		this.waitlist = waitlist;
 	}
 
-
-	public boolean isRented() {
-		return isRented;
-	}
-
-	
-	
-	public int getEquipmentIDList() {	
-		return equipmentID.peek();
+	public void setIsRented(boolean isRented) {
+		this.isRented = isRented;
 	}
 
 
@@ -123,10 +113,6 @@ public class Rental {
 		
 	}
 	
-	public Map<Integer, Queue<Integer>> getWaitlist() {
-		return waitlist;
-	}
-
 	public boolean rentOut(int customerID) {
 		if (!isRented) {
 			isRented = true;
@@ -142,10 +128,11 @@ public class Rental {
 		Queue<Integer> customerQueue = waitlist.get(getEquipmentID().peek());
 		if (customerQueue != null && !customerQueue.isEmpty()) {
 			int nextCustomerID = customerQueue.poll();
-			Customer nextCustomer = findCustomerByID(nextCustomerID);
+			Customer nextCustomer = Customer.getCustomerByID(nextCustomerID); ;
 		}
 	}
-
+	
+//Hashmap methods
 	public void addToWaitlist(int equipmentId, int customerId) {
 		if (waitlist.containsKey(equipmentId)) {
 			waitlist.get(equipmentId).offer(customerId);
@@ -169,25 +156,27 @@ public class Rental {
 		return !waitlist.isEmpty();
 	}
 
-	public Customer findCustomerByID(int customerID) {
-		for (Customer customer : customerList) {
-			if (customer.getCustomerID() == customerID) {
-				return customer;
-			}
-		}
-		return null;
-	}
+	
 
 	public Customer getNextCustomerOnWaitlist(int equipmentId) {
 		Queue<Integer> customerQueue = waitlist.get(equipmentId);
 		if (customerQueue != null && !customerQueue.isEmpty()) {
-			int nextCustomerId = customerQueue.poll();
-			return findCustomerByID(nextCustomerId);
+			int nextCustomerID = customerQueue.poll();
+			return Customer.getCustomerByID(nextCustomerID); 
 		} else {
 			return null;
 		}
 	}
+	
+	public int getWaitlistCount() {
+        return waitlist.size();
+    }
 
+    public boolean waitlistContainsKey(int customerID) {
+        return waitlist.containsKey(customerID);
+    }
+
+	//print methods
 	@Override
 	public String toString() {
 		return "Equipment ID: " + equipmentID.peek() + "   Name: " + equipmentName + "   Equipment Type: "

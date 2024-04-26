@@ -25,13 +25,7 @@ public class RentalDriver {
 		
 	}
 
-	public static void main(String[] args) {
-		RentalDriver rentalDriver = new RentalDriver();
-		rentalDriver.insertionSort();
-		JTextArea textArea = new JTextArea();
-		rentalDriver.displayReport(textArea);
-	}
-
+	
 	public LinkedList<Rental> getEquipmentList() {
 		return equipmentList;
 	}
@@ -154,7 +148,7 @@ public class RentalDriver {
 
 	public void rentEquipment(int equipmentID, int customerID) {
 		for (Rental rental : equipmentList) {
-			if (rental.getEquipmentIDList() == equipmentID && !rental.isRented()) {
+			if (rental.getEquipmentIDList() == equipmentID && !rental.getIsRented()) {
 				rental.rentOut(customerID);
 				return;
 			}
@@ -246,7 +240,7 @@ public class RentalDriver {
 	public String createRentedItemsReport() {
 	    StringBuilder report = new StringBuilder("Rented Items -\n");
 	    for (Rental rental : equipmentList) {
-	        if (rental.isRented()) {
+	        if (rental.getIsRented()) {
 	            report.append(rental.generateRentalReport()).append("\n"); 
 	        }
 	    }
@@ -290,8 +284,17 @@ public class RentalDriver {
 		}
 		return report.toString();
 	}
-
+	
+	public static void main(String[] args) {
+		RentalDriver rentalDriver = new RentalDriver();
+		rentalDriver.insertionSort();
+		JTextArea textArea = new JTextArea();
+		rentalDriver.displayReport(textArea);
+	}
 }
+
+
+
 
 //Medium, "Car Rental System using Java."  01 Oct, 2023, https://harshananayakkara.medium.com/car-rental-system-using-java-d5c6fd7e7f00
 
