@@ -5,9 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.Queue;
-
 import org.junit.jupiter.api.Test;
 
 import OutdoorRental.Rental;
@@ -183,18 +182,6 @@ class OutdoorTests {
 		assertEquals("Equipment ID: [1], Equipment Name: Pelican, Equipment Type: Kayak, Customer ID: -1", result);
 	}
 
-	/*
-	 * @Test void testPrintQueueEmptyQueue() { // ARRANGE Rental rental = new
-	 * Rental("Kayak", "Pelican"); // ACT // ASSERT
-	 * assertThrows(QueueEmptyException.class, () -> rental.toString()); }
-	 * 
-	 * @Test void testPrintQueue() throws QueueEmptyException { // ARRANGE Rental
-	 * rental = new Rental("Kayak", "Pelican");
-	 * 
-	 * int actual, expected; expected = 1; // ACT rental.enqueue(expected + 1);
-	 * rental.enqueue(expected + 2); actual = rental.toString(); // ASSERT
-	 * assertEquals(expected, actual); }
-	 */
 	@Test
 	public void testAddCustomer() {
 		// ARRANGE
@@ -242,9 +229,10 @@ class OutdoorTests {
 
 	@Test
 	public void hashMapBasicTest() {
-
+		// ARRANGE
 		Map<Integer, Customer> customerMap = new HashMap<>();
 
+		// ACT & ASSERT
 		assertTrue(customerMap.isEmpty());
 		assertEquals(0, customerMap.size());
 		assertFalse(customerMap.containsKey(1));
@@ -304,8 +292,10 @@ class OutdoorTests {
 
 	@Test
 	public void hashMapConstructorTests() {
+		// ARRANGE
 		Customer customer = new Customer("Leslie Hill", 37, "YY123AA12", "641-555-1234");
 
+		// ASSERT
 		assertEquals("Leslie Hill", customer.getCustomerName());
 		assertEquals(37, customer.getAge());
 		assertEquals("YY123AA12", customer.getLicenseId());
@@ -314,10 +304,11 @@ class OutdoorTests {
 
 	@Test
 	public void equalsTest() {
-
+		// ARRANGE
 		Customer customer1 = new Customer("Leslie Hill", 37, "YY123AA12", "641-555-1234");
 		Customer customer2 = new Customer("Leslie Hill", 37, "YY123AA12", "641-555-1234");
 
+		// ACT & ASSERT
 		assertTrue(customer1.equals(customer2));
 
 		customer2.setAge(31);
@@ -350,48 +341,46 @@ class OutdoorTests {
 	}
 
 	@Test
-	public void testWaitlistContainsKey() {
+	public void testRentEquipment() {
 		// ARRANGE
-		Map<Integer, Queue<Integer>> waitlist = new HashMap<>();
-		int equipmentId = 1;
-		Queue<Integer> customerQueue = new LinkedList<>();
-		customerQueue.offer(10);
-		waitlist.put(equipmentId, customerQueue);
-
-		// ACT & ASSERT
-		assertTrue(waitlist.containsKey(equipmentId));
-		assertFalse(waitlist.containsKey(45));
+		RentalDriver rentalDriver = new RentalDriver();
+		rentalDriver.addCustomer("Brandy Brown", 29, "YY456AA34", "641-555-2345");
+		int customerId = Customer.getLastCustomerID();
+		rentalDriver.addEquipment(20, "Tent", "Coleman");
+		int equipmentId = 20;
+		// ACT
+		rentalDriver.rentEquipment(equipmentId, customerId);
+		Map<Integer, List<Customer>> rentalCustomerMap = rentalDriver.getRentalCustomerMap();
+		// ASSERT
+		assertTrue(rentalCustomerMap.containsKey(equipmentId));
+		assertTrue(rentalCustomerMap.get(equipmentId).contains(Customer.getCustomerByID(customerId)));
 	}
 
 	@Test
-	public void testWaitlistBasicOperations() {
+	public void testEquipmentID() {
 		// ARRANGE
-		Map<Integer, Queue<Integer>> waitlist = new HashMap<>();
-		int equipmentId = 1;
-		Queue<Integer> customerQueue = new LinkedList<>();
-		customerQueue.offer(10);
-		waitlist.put(equipmentId, customerQueue);
-
-		// ASSERT
-		assertTrue(waitlist.isEmpty());
-		assertEquals(1, waitlist.size());
-		assertTrue(waitlist.containsKey(equipmentId));
-		assertNotNull(waitlist.toString());
-
+		RentalDriver rentalDriver = new RentalDriver();
+		rentalDriver.addEquipment(20, "Tent", "Coleman");
 		// ACT & ASSERT
-		assertNull(waitlist.put(2, new LinkedList<Integer>()));
-		assertEquals(2, waitlist.size());
-
-		// ACT & ASSERT
-		assertEquals(1, waitlist.get(equipmentId).size());
-		assertEquals(10, (int) waitlist.get(equipmentId).peek());
-		// ACT & ASSERT
-		assertEquals(1, waitlist.size());
-		assertEquals(1, waitlist.remove(equipmentId).size());
-		assertEquals(0, waitlist.size());
-
-		// ACT & ASSERT
-		assertFalse(waitlist.containsKey(equipmentId));
+		assertFalse(rentalDriver.equipmentID(20));
+		assertTrue(rentalDriver.equipmentID(21));
 	}
 
+	@Test
+	public void testReturnEquipment() {
+		// ARRANGE
+		RentalDriver rentalDriver = new RentalDriver();
+		int equipmentId = 14;
+		int customerId = 1;
+
+		rentalDriver.rentEquipment(equipmentId, customerId);
+
+		int initialSize = rentalDriver.getEquipmentList().size();
+
+		// ACT
+		rentalDriver.removeEquipment(equipmentId);
+
+		// ASSERT
+		assertEquals(initialSize - 1, rentalDriver.getEquipmentList().size());
+	}
 }

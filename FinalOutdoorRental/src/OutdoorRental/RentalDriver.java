@@ -5,36 +5,32 @@ import java.util.List;
 import javax.swing.JTextArea;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Queue;
 
 public class RentalDriver {
 
-	private LinkedList<Rental> equipmentList;
-	private LinkedList<Customer> customerList;
-	private Map<Integer, List<Customer>> rentalCustomerMap;
-	private Rental rental;
+	private LinkedList<Rental> equipmentList; // list of equipment available for rental
+	private Map<Integer, List<Customer>> rentalCustomerMap; // map of equipment IDs to lists of customers
+	private Rental rental; // rental object for managing rentals
 
+	// constructor
 	public RentalDriver() {
 		equipmentList = new LinkedList<>();
-		customerList = new LinkedList<>();
-		rentalCustomerMap = new HashMap<>();
 		rental = new Rental("EquipmentType", "EquipmentName");
-		populateEquipmentList();
-		populateCustomerList();
-
-		
+		rentalCustomerMap = new HashMap<>();
+		Customer.customerMap = Customer.getCustomerMap(); // gets customer map from Customer class
+		populateEquipmentList(); // populate equipment and customer lists
+		populateCustomerMap();
 	}
 
-	
-	public LinkedList<Rental> getEquipmentList() {
+	public LinkedList<Rental> getEquipmentList() { // gets list of equipment
 		return equipmentList;
 	}
 
-	public LinkedList<Customer> getCustomerList() {
-		return customerList;
+	public Map<Integer, List<Customer>> getRentalCustomerMap() { // gets customer map
+		return rentalCustomerMap;
 	}
 
-	private void populateEquipmentList() {
+	public void populateEquipmentList() { // adds to equipment list, sets equipmentID's, adds name and type
 		Rental kayak1 = new Rental("Single Kayak", "Pelican");
 		equipmentList.add(kayak1);
 		kayak1.setEquipmentID(14);
@@ -83,218 +79,176 @@ public class RentalDriver {
 		equipmentList.add(canoe3);
 		canoe3.setEquipmentID(8);
 
-		kayak1.rentOut(1);
-		bike1.rentOut(5);
-		cooler2.rentOut(3);
-		canoe1.rentOut(4);
-		tent.rentOut(1);
-		generator2.rentOut(1);
-
-		kayak1.addToWaitlist(1, 2);
-		kayak1.addToWaitlist(1, 3);
-
-		canoe1.addToWaitlist(11, 5);
-		canoe1.addToWaitlist(11, 4);
-		canoe1.addToWaitlist(11, 6);
-
-		cooler2.addToWaitlist(8, 2);
-		cooler2.addToWaitlist(1, 3);
-
+		kayak1.rentOutItem(1); // rents out items, num in () is customerID
+		bike1.rentOutItem(5);
+		cooler2.rentOutItem(3);
+		canoe1.rentOutItem(4);
+		tent.rentOutItem(1);
+		generator2.rentOutItem(1);
 	}
 
-	private void populateCustomerList() {
-		customerList.add(new Customer("Leslie Hill", 37, "YY123AA12", "641-555-1234"));
-		customerList.add(new Customer("Brandy Brown", 29, "YY456AA34", "641-555-2345"));
-		customerList.add(new Customer("Thomas Underwood", 27, "YY789AA56", "641-555-4321"));
-		customerList.add(new Customer("Shawn McKanich", 30, "YY987AA78", "641-555-3456"));
-		customerList.add(new Customer("Bobby Tutor", 23, "YY765AA89", "641-555-6543"));
-		customerList.add(new Customer("Fletcher Flynn", 25, "YY654AA78", "641-555-5678"));
-		customerList.add(new Customer("Bill Brown", 56, "YY543AA67", "641-555-8765"));
-		customerList.add(new Customer("Valerie Underwood", 38, "YY432AA67", "641-555-9876"));
-		customerList.add(new Customer("Linda Greiner", 49, "YY321AA54", "641-555-4836"));
-
+	public void populateCustomerMap() { // adds customers to customer map, adds name, age, lisence #, and phone number
+		Customer.addCustomer(new Customer("Leslie Hill", 37, "YY123AA12", "641-555-1234"));
+		Customer.addCustomer(new Customer("Brandy Brown", 29, "YY456AA34", "641-555-2345"));
+		Customer.addCustomer(new Customer("Thomas Underwood", 27, "YY789AA56", "641-555-4321"));
+		Customer.addCustomer(new Customer("Shawn McKanich", 30, "YY987AA78", "641-555-3456"));
+		Customer.addCustomer(new Customer("Bobby Tutor", 23, "YY765AA89", "641-555-6543"));
+		Customer.addCustomer(new Customer("Fletcher Flynn", 25, "YY654AA78", "641-555-5678"));
+		Customer.addCustomer(new Customer("Bill Brown", 56, "YY543AA67", "641-555-8765"));
+		Customer.addCustomer(new Customer("Valerie Underwood", 38, "YY432AA67", "641-555-9876"));
+		Customer.addCustomer(new Customer("Linda Greiner", 49, "YY321AA54", "641-555-4836"));
 	}
 
+	// method to add equipment
 	public void addEquipment(int equipmentID, String equipmentType, String equipmentName) {
-		Rental equipment = new Rental(equipmentType, equipmentName);
-		equipment.setEquipmentID(equipmentID);
-		equipmentList.add(equipment);
+		Rental equipment = new Rental(equipmentType, equipmentName); // creates new Rental object with type and name
+		equipment.setEquipmentID(equipmentID); // set ID's of equipment
+		equipmentList.add(equipment); // adds equipment to equipment list
 	}
 
+	// method to remove equipment
 	public boolean removeEquipment(int equipmentId) {
-		for (Rental equipment : equipmentList) {
-			if (equipment.getEquipmentID().peek() == equipmentId) {
-				equipmentList.remove(equipment);
+		for (Rental equipment : equipmentList) { // iterates through equipment list
+			if (equipment.getEquipmentID().peek() == equipmentId) { // makes sure ID of the equipment matches ID entered
+				equipmentList.remove(equipment); // removes equipment from the list
 				return true;
 			}
 		}
 		return false;
 	}
 
+	// method to add customer
 	public void addCustomer(String customerName, int age, String licenseId, String phoneNumber) {
-		Customer customer = new Customer(customerName, age, licenseId, phoneNumber);
-		customerList.add(customer);
+		Customer customer = new Customer(customerName, age, licenseId, phoneNumber); // creates new Customer object with
+																						// customer parameters
+		Customer.addCustomer(customer); // adds customer to the customer map, calls addCustomer from Customer class
 	}
 
+	// method to remove customer
 	public boolean removeCustomer(int customerId) {
-		for (Customer customer : customerList) {
-			if (customer.getCustomerID() == customerId) {
-				customerList.remove(customer);
-				return true;
-			}
-		}
-		return false;
+		return Customer.removeCustomer(customerId) != null; // removes customer, calls removeCustomer method from
+															// Customer class
 	}
 
+	// method to rent equipment
 	public void rentEquipment(int equipmentID, int customerID) {
-		for (Rental rental : equipmentList) {
-			if (rental.getEquipmentIDList() == equipmentID && !rental.getIsRented()) {
-				rental.rentOut(customerID);
+		for (Rental rental : equipmentList) { // iterates through list of equipment
+			if (rental.getEquipmentIDList() == equipmentID && !rental.getIsRented()) { // makes sure equipment matches
+																						// the ID entered and is not
+																						// rented
+				rental.rentOutItem(customerID); // rents out equipment to customer
 				return;
 			}
 		}
-		System.out.println("Equipment is not found or already rented.");
+		System.out.println("Equipment is not found or already rented."); // prints a message if the equipment is not
+																			// found or already rented
 	}
 
+	// method to check if equipment is available
 	public boolean equipmentID(int equipmentID) {
-		for (Rental rental : equipmentList) {
-			LinkedList<Integer> equipmentIDs = rental.getEquipmentID();
+		for (Rental rental : equipmentList) { // iterates through list of equipment
+			LinkedList<Integer> equipmentIDs = rental.getEquipmentID(); // gets list of equipment IDs that matches
+																		// current equipment
 			for (Integer id : equipmentIDs) {
-				if (id == equipmentID) {
+				if (id == equipmentID) {// if match is found, equipmentID is already assigned to another equipment &
+										// returns false
 					return false;
 				}
 			}
 		}
-		return true;
+		return true; // if no match is found, the equipment ID is available & returns true
 	}
 
-	public void setCustomerList(LinkedList<Customer> customerList) {
-		this.customerList = customerList;
-	}
-
-	public Map<Integer, List<Customer>> getRentalCustomerMap() {
-		return rentalCustomerMap;
-	}
-
-	public void addToWaitlist(int equipmentId, int customerId) {
-		Rental rental = findRentalById(equipmentId);
-		if (rental != null) {
-			rental.addToWaitlist(equipmentId, customerId);
-		} else {
-			System.out.println("Equipment is not found.");
-		}
-	}
-
-	public void removeFromWaitlist(int equipmentId, int customerId) {
-	    Rental rental = findRentalById(equipmentId);
-	    if (rental != null) {
-	        rental.removeFromWaitlist(equipmentId, customerId);
-	    } else {
-	        System.out.println("Equipment is not found.");
-	    }
-	}
-
-	public Rental findRentalById(int equipmentId) {
+	// method to find rental by equipmentID
+	public Rental findRentalByID(int equipmentId) {
 		for (Rental rental : equipmentList) {
-			if (rental.getEquipmentID().peek() == equipmentId) {
-				return rental;
+			if (rental.getEquipmentID().peek() == equipmentId) { // checks if equipmentID of rental matches ID entered
+				return rental;// returns rental if found
 			}
 		}
-		return null;
+		return null;// returns null if rental is not found
 	}
 
-	public Customer findCustomerById(int customerId) {
-		for (Customer customer : customerList) {
-			if (customer.getCustomerID() == customerId) {
-				return customer;
+	// method to find customer by ID
+	public Customer findCustomerByID(int customerId) {
+		return Customer.getCustomerByID(customerId); // call to getCustomerByID method in Customer class
+	}
+
+	// method to sort equipmentList, uses Insertion sort on equipment ID's
+	public void insertionSort() {
+		int n = equipmentList.size(); // gets size of equipment list
+		for (int i = 1; i < n; ++i) { // iterates over elements
+			Rental key = equipmentList.get(i); // gets element to be inserted
+			int j = i - 1;
+			// moves elements that are greater than key to one position ahead
+			while (j >= 0 && equipmentList.get(j).getEquipmentID().peek() > key.getEquipmentID().peek()) {
+				equipmentList.set(j + 1, equipmentList.get(j));
+				j = j - 1;
 			}
+			equipmentList.set(j + 1, key); // inserts element
 		}
-		return null;
 	}
-	
-	 void insertionSort() {
-	 int n = equipmentList.size();
-     for (int i = 1; i < n; ++i) {
-         Rental key = equipmentList.get(i);
-         int j = i - 1;
+	// method to sort equipmentList, uses Insertion sort on equipment names
+	/*
+	 * public void insertionSort() { int n = equipmentList.size(); for (int i = 1; i
+	 * < n; ++i) { Rental key = equipmentList.get(i); String keyName =
+	 * key.getEquipmentName(); int j = i - 1;
+	 * 
+	 * // moves elements that are greater than key to one position ahead while (j >=
+	 * 0 && equipmentList.get(j).getEquipmentName().compareTo(keyName) > 0) {
+	 * equipmentList.set(j + 1, equipmentList.get(j)); j = j - 1; }
+	 * equipmentList.set(j + 1, key); } }
+	 */
 
-         while (j >= 0 && equipmentList.get(j).getEquipmentID().peek() > key.getEquipmentID().peek()) {
-             equipmentList.set(j + 1, equipmentList.get(j));
-             j = j - 1;
-         }
-         equipmentList.set(j + 1, key);
-     }
- }
-
+	// method to display reports
 	public void displayReport(JTextArea txtAreaReport) {
-		StringBuilder report = new StringBuilder();
-		report.append("Rented Items:\n").append(createRentedItemsReport()).append("\n"); 
+		StringBuilder report = new StringBuilder(); // initializes StringBuilder to build report
+		report.append("Rented Items:\n").append(createRentedItemsReport()).append("\n");
 		report.append("Equipment Report:\n").append(createEquipmentReport()).append("\n");
 		report.append("Customer Report:\n").append(createCustomerReport()).append("\n");
-		report.append("Waitlist Report:\n").append(createWaitlistReport()).append("\n");
+		// report.append("Waitlist
+		// Report:\n").append(createWaitlistReport()).append("\n");
 		txtAreaReport.setText(report.toString());
-
 	}
 
-	
+	// creates rented items report
 	public String createRentedItemsReport() {
-	    StringBuilder report = new StringBuilder("Rented Items -\n");
-	    for (Rental rental : equipmentList) {
-	        if (rental.getIsRented()) {
-	            report.append(rental.generateRentalReport()).append("\n"); 
-	        }
-	    }
-	    return report.toString();
-	}
-
-	public String createEquipmentReport() {
-		StringBuilder report = new StringBuilder("Equipment -\n");
-		for (Rental equipment : equipmentList) {
-			report.append(equipment.toString()).append("\n");
-		}
-		return report.toString();
-	}
-
-	public String createCustomerReport() {
-		StringBuilder report = new StringBuilder("Customers -\n");
-
-		for (Customer customer : customerList) {
-			report.append(customer.toString()).append("\n");
-		}
-		return report.toString();
-	}
-
-	public String createWaitlistReport() {
-		StringBuilder report = new StringBuilder("Waitlist -\n");
-		for (Rental rental : equipmentList) {
-			Map<Integer, Queue<Integer>> waitlistMap = rental.getWaitlist();
-			if (waitlistMap != null && !waitlistMap.isEmpty()) {
-				report.append("Equipment ID: ").append(rental.getEquipmentID().peek()).append("\n");
-				report.append("Customers:\n");
-				for (Queue<Integer> customerQueue : waitlistMap.values()) {
-					for (Integer customerId : customerQueue) {
-						Customer customer = findCustomerById(customerId);
-						if (customer != null) {
-							report.append(customer.toString()).append("\n");
-						}
-					}
-				}
-				report.append("\n");
+		StringBuilder report = new StringBuilder("Rented Items -\n"); // initializes StringBuilder to construct report
+		for (Rental rental : equipmentList) { // iterates through each rental in the equipment list
+			if (rental.getIsRented()) { // sees if rental is rented
+				report.append(rental.generateRentalReport()).append("\n"); // appends the rental report
 			}
 		}
 		return report.toString();
 	}
-	
+
+	// creates equipment report
+	public String createEquipmentReport() {
+		StringBuilder report = new StringBuilder("Equipment -\n"); // initializes StringBuilder to construct report
+		for (Rental equipment : equipmentList) { // iterates through each equipment in the equipment list
+			report.append(equipment.toString()).append("\n"); // appends the equipment details
+		}
+		return report.toString();
+	}
+
+	// creates customer report
+	public String createCustomerReport() {
+		StringBuilder report = new StringBuilder("Customers -\n"); // initializes StringBuilder to construct report
+		for (Customer customer : Customer.getCustomerMap().values()) { // iterates through each customer in the customer
+																		// map
+			report.append(customer.toString()).append("\n"); // appends the customer details
+		}
+		return report.toString();
+	}
+
 	public static void main(String[] args) {
-		RentalDriver rentalDriver = new RentalDriver();
-		rentalDriver.insertionSort();
-		JTextArea textArea = new JTextArea();
-		rentalDriver.displayReport(textArea);
+		RentalDriver rentalDriver = new RentalDriver(); // initializes a new RentalDriver instance
+		rentalDriver.insertionSort(); // sorts equipment list calling insertionSort method
+		JTextArea textArea = new JTextArea(); // initializes JTextArea to display the report
+		rentalDriver.displayReport(textArea); // displays report in the JTextArea
 	}
 }
-
-
-
+//Medium, "Combining a hash map with a linked list to boost performance." 25, Jan 2022,  https://medium.com/@rebizant/combining-a-hash-map-with-a-linked-list-to-boost-performance-9ce19873bbdf
 
 //Medium, "Car Rental System using Java."  01 Oct, 2023, https://harshananayakkara.medium.com/car-rental-system-using-java-d5c6fd7e7f00
 
@@ -303,6 +257,8 @@ public class RentalDriver {
 //GeeksforGeeks, "Insertion Sort – Data Structure and Algorithm Tutorials." 08 Apr, 2024, https://www.geeksforgeeks.org/insertion-sort/#
 
 //Oracle, "Class HashMap<K,V>." 2024, https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html
+
+//GeeksforGeeks, "Hashmap methods in Java with Examples | Set 2 (keySet(), values(), containsKey()..)." 14 Oct, 2019, https://www.geeksforgeeks.org/hashmap-methods-java-examples-set-2-keyset-values-containskey/?ref=header_search#
 
 //GeeksforGeeks, "HashMap in Java." 13 Dec, 2023, https://www.geeksforgeeks.org/java-util-hashmap-in-java-with-examples/#
 
